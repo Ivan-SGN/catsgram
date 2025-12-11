@@ -11,6 +11,7 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -69,5 +70,9 @@ public class UserService {
         if (emailAlreadyExists) {
             throw new DuplicatedDataException("Этот имейл уже используется");
         }
+    }
+
+    public Optional<User> findUserById(Long id){
+        return Optional.ofNullable(users.get(id));
     }
 }
