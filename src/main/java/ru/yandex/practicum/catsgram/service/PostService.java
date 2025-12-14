@@ -4,11 +4,10 @@ import org.springframework.stereotype.Service;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
 import ru.yandex.practicum.catsgram.model.Post;
+import ru.yandex.practicum.catsgram.model.SortOrder;
 
 import java.time.Instant;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 // Указываем, что класс PostService - является бином и его
 // нужно добавить в контекст приложения
@@ -16,12 +15,19 @@ import java.util.Map;
 public class PostService {
     private final Map<Long, Post> posts = new HashMap<>();
     private final UserService userService;
+    private final Comparator<Post> postDateComparator = Comparator.comparing(Post::getPostDate);
 
     public PostService(UserService userService) {
         this.userService = userService;
     }
 
-    public Collection<Post> findAll() {
+    public Collection<Post> findAll(int size, SortOrder sort, int from) {
+        posts.values().stream()
+                .skip(from)
+                .limit(size)
+                .sorted(sort.equals(SortOrder.ASCENDING) ?
+                        postDateComparator : postDateComparator.reversed())
+                .toList();
         return posts.values();
     }
 
@@ -30,7 +36,7 @@ public class PostService {
             throw new ConditionsNotMetException("Описание не может быть пустым");
         }
         if (userService.findUserById(post.getAuthorId()).isEmpty()){
-            throw new ConditionsNotMetException("Автор с id = "+ post.getAuthorId() + "не найден");
+            throw new ConditionsNotMetException("Автор с id = "+ post.getAuthorId() + " не найден");
         }
         post.setId(getNextId());
         post.setPostDate(Instant.now());
@@ -51,6 +57,10 @@ public class PostService {
             return oldPost;
         }
         throw new NotFoundException("Пост с id = " + newPost.getId() + " не найден");
+    }
+
+    public Optional<Post> findById(long postId) {
+        return Optional.ofNullable(posts.get(postId));
     }
 
     private long getNextId() {
