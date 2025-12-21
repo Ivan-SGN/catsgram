@@ -21,7 +21,7 @@ public class ImageController {
     }
 
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping("/posts/{postId}/images")
+    @PostMapping(value = "/posts/{postId}/images", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<Image> addPostImages(@PathVariable("postId") long postId,
                                      @RequestParam("image") List<MultipartFile> files) {
         return imageService.saveImages(postId, files);
