@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.catsgram.exception.ConditionsNotMetException;
 import ru.yandex.practicum.catsgram.exception.DuplicatedDataException;
 import ru.yandex.practicum.catsgram.exception.NotFoundException;
-import ru.yandex.practicum.catsgram.model.Post;
 import ru.yandex.practicum.catsgram.model.User;
 
 import java.time.Instant;
@@ -23,7 +22,7 @@ public class UserService {
         return users.values();
     }
 
-    public User create( User user) {
+    public User create(User user) {
         // проверяем выполнение необходимых условий
         if (user.getEmail() == null) {
             throw new ConditionsNotMetException("Имейл должен быть указан");
@@ -46,7 +45,7 @@ public class UserService {
             User oldUser = users.get(newUser.getId());
             oldUser.setUsername(newUser.getUsername());
             oldUser.setPassword(newUser.getPassword());
-            if (newUser.getEmail() != null){
+            if (newUser.getEmail() != null) {
                 validateEmail(newUser);
                 oldUser.setEmail(newUser.getEmail());
             }
@@ -70,7 +69,7 @@ public class UserService {
         return ++currentMaxId;
     }
 
-    private void validateEmail(User user){
+    private void validateEmail(User user) {
         boolean emailAlreadyExists =  users.values().stream()
                 .anyMatch(existingUser -> existingUser.getEmail().equals(user.getEmail()));
         if (emailAlreadyExists) {
@@ -78,7 +77,7 @@ public class UserService {
         }
     }
 
-    public Optional<User> findUserById(Long id){
+    public Optional<User> findUserById(Long id) {
         return Optional.ofNullable(users.get(id));
     }
 }

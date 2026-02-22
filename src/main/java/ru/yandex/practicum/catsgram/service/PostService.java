@@ -48,8 +48,8 @@ public class PostService {
         if (post.getDescription() == null || post.getDescription().isBlank()) {
             throw new ConditionsNotMetException("Описание не может быть пустым");
         }
-        if (userService.findUserById(post.getAuthorId()).isEmpty()){
-            throw new ConditionsNotMetException("Автор с id = "+ post.getAuthorId() + " не найден");
+        if (userService.findUserById(post.getAuthorId()).isEmpty()) {
+            throw new ConditionsNotMetException("Автор с id = " + post.getAuthorId() + " не найден");
         }
         post.setId(getNextId());
         post.setPostDate(Instant.now());
