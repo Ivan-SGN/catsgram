@@ -19,7 +19,7 @@ public class UserRepository extends BaseRepository<User> {
     private static final String UPDATE_QUERY = "UPDATE users SET username = ?, email = ?, password = ? WHERE id = ?";
 
     public UserRepository(JdbcTemplate jdbc, RowMapper<User> mapper) {
-        super(jdbc, mapper);
+        super(jdbc, mapper, User.class);
     }
 
     public List<User> findAll() {

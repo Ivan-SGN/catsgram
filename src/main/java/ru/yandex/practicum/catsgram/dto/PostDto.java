@@ -4,13 +4,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.time.Instant;
+import java.util.List;
 
 @Data
-public class UserDto {
+public class PostDto {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private long id;
-    private String username;
-    private String email;
+    private UserDto author;
+    private String description;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Instant registrationDate;
+    private Instant postDate;
+    private List<Long> images;
 }
